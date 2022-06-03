@@ -1,1 +1,3 @@
-export type DepartmentUpdateInput = {};
+export type DepartmentUpdateInput = {
+  name?: string | null;
+};

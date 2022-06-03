@@ -28,5 +28,12 @@ model Employee {
 model Department {
   createdAt DateTime @default(now())
   id        String   @id @default(cuid())
+  name      String?
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
   updatedAt DateTime @updatedAt
 }

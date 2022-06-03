@@ -18,6 +18,9 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { CreateDepartmentArgs } from "./CreateDepartmentArgs";
+import { UpdateDepartmentArgs } from "./UpdateDepartmentArgs";
 import { DeleteDepartmentArgs } from "./DeleteDepartmentArgs";
 import { DepartmentFindManyArgs } from "./DepartmentFindManyArgs";
 import { DepartmentFindUniqueArgs } from "./DepartmentFindUniqueArgs";
@@ -79,6 +82,47 @@ export class DepartmentResolverBase {
       return null;
     }
     return result;
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Department)
+  @nestAccessControl.UseRoles({
+    resource: "Department",
+    action: "create",
+    possession: "any",
+  })
+  async createDepartment(
+    @graphql.Args() args: CreateDepartmentArgs
+  ): Promise<Department> {
+    return await this.service.create({
+      ...args,
+      data: args.data,
+    });
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Department)
+  @nestAccessControl.UseRoles({
+    resource: "Department",
+    action: "update",
+    possession: "any",
+  })
+  async updateDepartment(
+    @graphql.Args() args: UpdateDepartmentArgs
+  ): Promise<Department | null> {
+    try {
+      return await this.service.update({
+        ...args,
+        data: args.data,
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new apollo.ApolloError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
   }
 
   @graphql.Mutation(() => Department)
