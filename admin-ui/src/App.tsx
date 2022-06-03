@@ -17,6 +17,10 @@ import { DepartmentList } from "./department/DepartmentList";
 import { DepartmentCreate } from "./department/DepartmentCreate";
 import { DepartmentEdit } from "./department/DepartmentEdit";
 import { DepartmentShow } from "./department/DepartmentShow";
+import { ProjectList } from "./project/ProjectList";
+import { ProjectCreate } from "./project/ProjectCreate";
+import { ProjectEdit } from "./project/ProjectEdit";
+import { ProjectShow } from "./project/ProjectShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -63,6 +67,13 @@ const App = (): React.ReactElement => {
           edit={DepartmentEdit}
           create={DepartmentCreate}
           show={DepartmentShow}
+        />
+        <Resource
+          name="Project"
+          list={ProjectList}
+          edit={ProjectEdit}
+          create={ProjectCreate}
+          show={ProjectShow}
         />
       </Admin>
     </div>
